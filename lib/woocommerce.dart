@@ -110,10 +110,10 @@ class WooCommerce {
   late String baseUrl;
 
   /// Parameter [consumerKey] is the consumer key provided by WooCommerce, e.g. `ck_12abc34n56j`.
-  String? consumerKey;
+  // String? consumerKey;
 
   /// Parameter [consumerSecret] is the consumer secret provided by WooCommerce, e.g. `cs_1uab8h3s3op`.
-  String? consumerSecret;
+  // String? consumerSecret;
 
   /// Returns if the website is https or not based on the [baseUrl] parameter.
   bool? isHttps;
@@ -134,8 +134,6 @@ class WooCommerce {
     bool isDebug = false,
   }) {
     this.baseUrl = baseUrl;
-    this.consumerKey = consumerKey;
-    this.consumerSecret = consumerSecret;
     this.apiPath = apiPath;
     this.isDebug = isDebug;
 
@@ -189,6 +187,15 @@ class WooCommerce {
     } else {
       throw new WooCommerceError.fromJson(json.decode(response.body));
     }
+  }
+
+  Future authenticateViaToken({required String token}) async {
+    
+      _authToken = token;
+      _localDbService.updateSecurityToken(_authToken);
+      _urlHeader['Authorization'] = 'Bearer $token';
+      return _authToken;
+  
   }
 
   /// Authenticates the user via JWT and returns a WooCommerce customer object of the current logged in customer.
@@ -1601,106 +1608,107 @@ class WooCommerce {
   /// if [isHttps] is true we just return the URL with
   /// [consumerKey] and [consumerSecret] as query parameters
   String _getOAuthURL(String requestMethod, String endpoint) {
-    String? consumerKey = this.consumerKey;
-    String? consumerSecret = this.consumerSecret;
+    // String? consumerKey = this.consumerKey;
+    // String? consumerSecret = this.consumerSecret;
 
     String token = "";
     _printToLog('oauth token = : ' + token);
     String url = this.baseUrl + apiPath + endpoint;
     bool containsQueryParams = url.contains("?");
 
-    if (this.isHttps == true) {
-      return url +
-          (containsQueryParams == true
-              ? "&consumer_key=" +
-                  this.consumerKey! +
-                  "&consumer_secret=" +
-                  this.consumerSecret!
-              : "?consumer_key=" +
-                  this.consumerKey! +
-                  "&consumer_secret=" +
-                  this.consumerSecret!);
-    }
+    // if (this.isHttps == true) {
+    return url;
+    //   // return url +
+    //   //     (containsQueryParams == true
+    //   //         ? "&consumer_key=" +
+    //   //             this.consumerKey! +
+    //   //             "&consumer_secret=" +
+    //   //             this.consumerSecret!
+    //   //         : "?consumer_key=" +
+    //   //             this.consumerKey! +
+    //   //             "&consumer_secret=" +
+    //   //             this.consumerSecret!);
+    // }
 
-    Random rand = Random();
-    List<int> codeUnits = List.generate(10, (index) {
-      return rand.nextInt(26) + 97;
-    });
+    // Random rand = Random();
+    // List<int> codeUnits = List.generate(10, (index) {
+    //   return rand.nextInt(26) + 97;
+    // });
 
-    /// Random string uniquely generated to identify each signed request
-    String nonce = String.fromCharCodes(codeUnits);
+    // /// Random string uniquely generated to identify each signed request
+    // String nonce = String.fromCharCodes(codeUnits);
 
-    /// The timestamp allows the Service Provider to only keep nonce values for a limited time
-    int timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    // /// The timestamp allows the Service Provider to only keep nonce values for a limited time
+    // int timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
-    String parameters = "oauth_consumer_key=" +
-        consumerKey! +
-        "&oauth_nonce=" +
-        nonce +
-        "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" +
-        timestamp.toString() +
-        "&oauth_token=" +
-        token +
-        "&oauth_version=1.0&";
+    // String parameters = "oauth_consumer_key=" +
+    //     consumerKey! +
+    //     "&oauth_nonce=" +
+    //     nonce +
+    //     "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" +
+    //     timestamp.toString() +
+    //     "&oauth_token=" +
+    //     token +
+    //     "&oauth_version=1.0&";
 
-    if (containsQueryParams == true) {
-      parameters = parameters + url.split("?")[1];
-    } else {
-      parameters = parameters.substring(0, parameters.length - 1);
-    }
+    // if (containsQueryParams == true) {
+    //   parameters = parameters + url.split("?")[1];
+    // } else {
+    //   parameters = parameters.substring(0, parameters.length - 1);
+    // }
 
-    Map<dynamic, dynamic> params = QueryString.parse(parameters);
-    Map<dynamic, dynamic> treeMap = new SplayTreeMap<dynamic, dynamic>();
-    treeMap.addAll(params);
+    // Map<dynamic, dynamic> params = QueryString.parse(parameters);
+    // Map<dynamic, dynamic> treeMap = new SplayTreeMap<dynamic, dynamic>();
+    // treeMap.addAll(params);
 
-    String parameterString = "";
+    // String parameterString = "";
 
-    for (var key in treeMap.keys) {
-      parameterString = parameterString +
-          Uri.encodeQueryComponent(key) +
-          "=" +
-          treeMap[key] +
-          "&";
-    }
+    // for (var key in treeMap.keys) {
+    //   parameterString = parameterString +
+    //       Uri.encodeQueryComponent(key) +
+    //       "=" +
+    //       treeMap[key] +
+    //       "&";
+    // }
 
-    parameterString = parameterString.substring(0, parameterString.length - 1);
+    // parameterString = parameterString.substring(0, parameterString.length - 1);
 
-    String method = requestMethod;
-    String baseString = method +
-        "&" +
-        Uri.encodeQueryComponent(
-            containsQueryParams == true ? url.split("?")[0] : url) +
-        "&" +
-        Uri.encodeQueryComponent(parameterString);
+    // String method = requestMethod;
+    // String baseString = method +
+    //     "&" +
+    //     Uri.encodeQueryComponent(
+    //         containsQueryParams == true ? url.split("?")[0] : url) +
+    //     "&" +
+    //     Uri.encodeQueryComponent(parameterString);
 
-    String signingKey = consumerSecret! + "&" + token;
-    crypto.Hmac hmacSha1 =
-        crypto.Hmac(crypto.sha1, utf8.encode(signingKey)); // HMAC-SHA1
+    // String signingKey = consumerSecret! + "&" + token;
+    // crypto.Hmac hmacSha1 =
+    //     crypto.Hmac(crypto.sha1, utf8.encode(signingKey)); // HMAC-SHA1
 
-    /// The Signature is used by the server to verify the
-    /// authenticity of the request and prevent unauthorized access.
-    /// Here we use HMAC-SHA1 method.
-    crypto.Digest signature = hmacSha1.convert(utf8.encode(baseString));
+    // /// The Signature is used by the server to verify the
+    // /// authenticity of the request and prevent unauthorized access.
+    // /// Here we use HMAC-SHA1 method.
+    // crypto.Digest signature = hmacSha1.convert(utf8.encode(baseString));
 
-    String finalSignature = base64Encode(signature.bytes);
+    // String finalSignature = base64Encode(signature.bytes);
 
-    String requestUrl = "";
+    // String requestUrl = "";
 
-    if (containsQueryParams == true) {
-      requestUrl = url.split("?")[0] +
-          "?" +
-          parameterString +
-          "&oauth_signature=" +
-          Uri.encodeQueryComponent(finalSignature);
-    } else {
-      requestUrl = url +
-          "?" +
-          parameterString +
-          "&oauth_signature=" +
-          Uri.encodeQueryComponent(finalSignature);
-    }
+    // if (containsQueryParams == true) {
+    //   requestUrl = url.split("?")[0] +
+    //       "?" +
+    //       parameterString +
+    //       "&oauth_signature=" +
+    //       Uri.encodeQueryComponent(finalSignature);
+    // } else {
+    //   requestUrl = url +
+    //       "?" +
+    //       parameterString +
+    //       "&oauth_signature=" +
+    //       Uri.encodeQueryComponent(finalSignature);
+    // }
 
-    return requestUrl;
+    // return requestUrl;
   }
 
   _handleError(dynamic response) {
