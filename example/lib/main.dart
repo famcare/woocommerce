@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-String baseUrl = "";
+String baseUrl = "https://clinic-develop.famcare.app/";
 String consumerKey = "";
 String consumerSecret = "";
 

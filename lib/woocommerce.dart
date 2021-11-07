@@ -96,6 +96,8 @@ export 'models/tax_rate.dart' show WooTaxRate;
 export 'models/jwt_response.dart' show WooJWTResponse;
 export 'models/user.dart' show WooUser;
 
+var headerAuthorization = "TOKEN";
+
 /// Create a new Instance of [WooCommerce] and pass in the necessary parameters into the constructor.
 ///
 /// For example
@@ -155,8 +157,8 @@ class WooCommerce {
   String get apiResourceUrl => queryUri.toString();
 
   // Header to be sent for JWT authourization
-  Map<String, String> _urlHeader = {'Authorization': ''};
-  String get urlHeader => _urlHeader['Authorization'] = 'Bearer ' + authToken!;
+  Map<String, String> _urlHeader = {headerAuthorization: ''};
+  String get urlHeader => _urlHeader[headerAuthorization] = 'Bearer ' + authToken!;
   LocalDatabaseService _localDbService = LocalDatabaseService();
 
   /// Authenticates the user using WordPress JWT authentication and returns the access [_token] string.
@@ -180,7 +182,7 @@ class WooCommerce {
           WooJWTResponse.fromJson(json.decode(response.body));
       _authToken = authResponse.token;
       _localDbService.updateSecurityToken(_authToken);
-      _urlHeader['Authorization'] = 'Bearer ${authResponse.token}';
+      _urlHeader[headerAuthorization] = 'Bearer ${authResponse.token}';
       return _authToken;
     } else {
       throw new WooCommerceError.fromJson(json.decode(response.body));
@@ -190,7 +192,7 @@ class WooCommerce {
   Future authenticateViaToken({required String token}) async {
     _authToken = token;
     _localDbService.updateSecurityToken(_authToken);
-    _urlHeader['Authorization'] = 'Bearer $token';
+    _urlHeader[headerAuthorization] = 'Bearer $token';
     return _authToken;
   }
 
@@ -229,7 +231,7 @@ class WooCommerce {
   /// Associated endpoint : /wp-json/wp/v2/users/me
   Future<int?> fetchLoggedInUserId() async {
     _authToken = await _localDbService.getSecurityToken();
-    _urlHeader['Authorization'] = 'Bearer ' + _authToken!;
+    _urlHeader[headerAuthorization] = 'Bearer ' + _authToken!;
     final response = await http.get(Uri.parse(this.baseUrl + URL_USER_ME),
         headers: _urlHeader);
 
@@ -1015,7 +1017,7 @@ class WooCommerce {
     };
     if (variations != null) data['variations'] = variations;
     await getAuthTokenFromDb();
-    _urlHeader['Authorization'] = 'Bearer ' + _authToken!;
+    _urlHeader[headerAuthorization] = 'Bearer ' + _authToken!;
     final response = await http.post(
         Uri.parse(this.baseUrl + URL_STORE_API_PATH + 'cart/items'),
         headers: _urlHeader,
@@ -1039,7 +1041,7 @@ class WooCommerce {
 
   Future<List<WooCartItem>> getMyCartItems() async {
     await getAuthTokenFromDb();
-    _urlHeader['Authorization'] = 'Bearer ' + _authToken!;
+    _urlHeader[headerAuthorization] = 'Bearer ' + _authToken!;
     final response = await http.get(
         Uri.parse(this.baseUrl + URL_STORE_API_PATH + 'cart/items'),
         headers: _urlHeader);
@@ -1068,7 +1070,7 @@ class WooCommerce {
 
   Future<WooCart> getMyCart() async {
     await getAuthTokenFromDb();
-    _urlHeader['Authorization'] = 'Bearer ' + _authToken!;
+    _urlHeader[headerAuthorization] = 'Bearer ' + _authToken!;
     WooCart cart;
     final response = await http.get(
         Uri.parse(this.baseUrl + URL_STORE_API_PATH + 'cart'),
@@ -1092,7 +1094,7 @@ class WooCommerce {
     };
     _printToLog('Deleting CartItem With Payload : ' + data.toString());
     await getAuthTokenFromDb();
-    _urlHeader['Authorization'] = 'Bearer ' + _authToken!;
+    _urlHeader[headerAuthorization] = 'Bearer ' + _authToken!;
 
     final http.Response response = await http.delete(
       Uri.parse(this.baseUrl + URL_STORE_API_PATH + 'cart/items/' + key),
@@ -1117,7 +1119,7 @@ class WooCommerce {
 
   Future deleteAllMyCartItems() async {
     await getAuthTokenFromDb();
-    _urlHeader['Authorization'] = 'Bearer ' + _authToken!;
+    _urlHeader[headerAuthorization] = 'Bearer ' + _authToken!;
 
     final http.Response response = await http.delete(
       Uri.parse(this.baseUrl + URL_STORE_API_PATH + 'cart/items/'),
@@ -1138,7 +1140,7 @@ class WooCommerce {
 
   Future<WooCartItem> getMyCartItemByKey(String key) async {
     await getAuthTokenFromDb();
-    _urlHeader['Authorization'] = 'Bearer ' + _authToken!;
+    _urlHeader[headerAuthorization] = 'Bearer ' + _authToken!;
     WooCartItem cartItem;
     final response = await http.get(
         Uri.parse(this.baseUrl + URL_STORE_API_PATH + 'cart/items/' + key),
@@ -1168,7 +1170,7 @@ class WooCommerce {
     };
     if (variations != null) data['variations'] = variations;
     await getAuthTokenFromDb();
-    _urlHeader['Authorization'] = 'Bearer ' + _authToken!;
+    _urlHeader[headerAuthorization] = 'Bearer ' + _authToken!;
     final response = await http.put(
         Uri.parse(this.baseUrl + URL_STORE_API_PATH + 'cart/items/' + key),
         headers: _urlHeader,
@@ -1793,7 +1795,7 @@ class WooCommerce {
     Map<String, String> headers = new HashMap();
     headers.putIfAbsent('Accept', () => 'application/json charset=utf-8');
     if (_token != "0") {
-      headers.putIfAbsent('Authorization', () => _bearerToken);
+      headers.putIfAbsent(headerAuthorization, () => _bearerToken);
     }
     try {
       final http.Response response =
@@ -1825,8 +1827,7 @@ class WooCommerce {
     //request.headers[HttpHeaders.authorizationHeader] = _bearerToken;
     request.headers[HttpHeaders.cacheControlHeader] = "no-cache";
     if (_token != "0") {
-    request.headers["Authorization"] = _bearerToken;
-
+      request.headers[headerAuthorization] = _bearerToken;
     }
     request.headers["Accept"] = "'application/json charset=utf-8'";
 
@@ -1842,7 +1843,7 @@ class WooCommerce {
 
   Future<dynamic> put(String endPoint, Map? data) async {
     String url = this._getOAuthURL("PUT", endPoint);
-   String _token = await _localDbService.getSecurityToken();
+    String _token = await _localDbService.getSecurityToken();
 
     String _bearerToken = "Bearer $_token";
 
@@ -1851,9 +1852,8 @@ class WooCommerce {
     request.headers[HttpHeaders.contentTypeHeader] =
         'application/json; charset=utf-8';
     request.headers[HttpHeaders.cacheControlHeader] = "no-cache";
-     if (_token != "0") {
-    request.headers["Authorization"] = _bearerToken;
-
+    if (_token != "0") {
+      request.headers[headerAuthorization] = _bearerToken;
     }
     request.headers["Accept"] = "'application/json charset=utf-8'";
     request.body = json.encode(data);
@@ -1866,10 +1866,9 @@ class WooCommerce {
 
   /// Make a custom delete request to Woocommerce, using WooCommerce SDK.
 
-
   Future<dynamic> delete(String endPoint, Map data, {String? aUrl}) async {
     String realUrl;
-       String _token = await _localDbService.getSecurityToken();
+    String _token = await _localDbService.getSecurityToken();
 
     String _bearerToken = "Bearer $_token";
     final url = this._getOAuthURL("DELETE", endPoint);
@@ -1884,8 +1883,8 @@ class WooCommerce {
       "Accept": "application/json",
     });
 
-       if (_token != "0") {
-      request.headers.putIfAbsent('Authorization', () => _bearerToken);
+    if (_token != "0") {
+      request.headers.putIfAbsent(headerAuthorization, () => _bearerToken);
     }
     request.body = jsonEncode(data);
     final response = await request.send();
