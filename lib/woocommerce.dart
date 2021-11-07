@@ -1792,9 +1792,12 @@ class WooCommerce {
     _printToLog('this is the bearer token : ' + _bearerToken);
     Map<String, String> headers = new HashMap();
     headers.putIfAbsent('Accept', () => 'application/json charset=utf-8');
-    // 'Authorization': _bearerToken,
+    if (_token != "0") {
+      headers.putIfAbsent('Authorization', () => _bearerToken);
+    }
     try {
-      final http.Response response = await http.get(Uri.parse(url));
+      final http.Response response =
+          await http.get(Uri.parse(url), headers: headers);
       if (response.statusCode == 200) {
         return json.decode(response.body);
       }
@@ -1804,22 +1807,6 @@ class WooCommerce {
     }
   }
 
-  Future<dynamic> oldget(String endPoint) async {
-    String url = this._getOAuthURL("GET", endPoint);
-
-    http.Client client = http.Client();
-    http.Request request = http.Request('GET', Uri.parse(url));
-    request.headers[HttpHeaders.contentTypeHeader] =
-        'application/json; charset=utf-8';
-    //request.headers[HttpHeaders.authorizationHeader] = _token;
-    request.headers[HttpHeaders.cacheControlHeader] = "no-cache";
-    String response =
-        await client.send(request).then((res) => res.stream.bytesToString());
-    var dataResponse = await json.decode(response);
-    _handleError(dataResponse);
-    return dataResponse;
-  }
-
   /// Make a custom post request to Woocommerce, using WooCommerce SDK.
 
   Future<dynamic> post(
@@ -1827,6 +1814,9 @@ class WooCommerce {
     Map data,
   ) async {
     String url = this._getOAuthURL("POST", endPoint);
+    String _token = await _localDbService.getSecurityToken();
+
+    String _bearerToken = "Bearer $_token";
 
     http.Client client = http.Client();
     http.Request request = http.Request('POST', Uri.parse(url));
@@ -1834,6 +1824,12 @@ class WooCommerce {
         'application/json; charset=utf-8';
     //request.headers[HttpHeaders.authorizationHeader] = _bearerToken;
     request.headers[HttpHeaders.cacheControlHeader] = "no-cache";
+    if (_token != "0") {
+    request.headers["Authorization"] = _bearerToken;
+
+    }
+    request.headers["Accept"] = "'application/json charset=utf-8'";
+
     request.body = json.encode(data);
     String response =
         await client.send(request).then((res) => res.stream.bytesToString());
@@ -1846,12 +1842,20 @@ class WooCommerce {
 
   Future<dynamic> put(String endPoint, Map? data) async {
     String url = this._getOAuthURL("PUT", endPoint);
+   String _token = await _localDbService.getSecurityToken();
+
+    String _bearerToken = "Bearer $_token";
 
     http.Client client = http.Client();
     http.Request request = http.Request('PUT', Uri.parse(url));
     request.headers[HttpHeaders.contentTypeHeader] =
         'application/json; charset=utf-8';
     request.headers[HttpHeaders.cacheControlHeader] = "no-cache";
+     if (_token != "0") {
+    request.headers["Authorization"] = _bearerToken;
+
+    }
+    request.headers["Accept"] = "'application/json charset=utf-8'";
     request.body = json.encode(data);
     String response =
         await client.send(request).then((res) => res.stream.bytesToString());
@@ -1862,26 +1866,12 @@ class WooCommerce {
 
   /// Make a custom delete request to Woocommerce, using WooCommerce SDK.
 
-  Future<dynamic> oldelete(String endPoint, Map data) async {
-    String url = this._getOAuthURL("DELETE", endPoint);
-
-    http.Client client = http.Client();
-    http.Request request = http.Request('DELETE', Uri.parse(url));
-    request.headers[HttpHeaders.contentTypeHeader] =
-        'application/json; charset=utf-8';
-    //request.headers[HttpHeaders.authorizationHeader] = _urlHeader['Authorization'];
-    request.headers[HttpHeaders.cacheControlHeader] = "no-cache";
-    request.body = json.encode(data);
-    final response =
-        await client.send(request).then((res) => res.stream.bytesToString());
-    _printToLog("this is the delete's response : " + response.toString());
-    var dataResponse = await json.decode(response);
-    _handleHttpError(dataResponse);
-    return dataResponse;
-  }
 
   Future<dynamic> delete(String endPoint, Map data, {String? aUrl}) async {
     String realUrl;
+       String _token = await _localDbService.getSecurityToken();
+
+    String _bearerToken = "Bearer $_token";
     final url = this._getOAuthURL("DELETE", endPoint);
     if (aUrl == null) {
       realUrl = url;
@@ -1893,6 +1883,10 @@ class WooCommerce {
     request.headers.addAll(<String, String>{
       "Accept": "application/json",
     });
+
+       if (_token != "0") {
+      request.headers.putIfAbsent('Authorization', () => _bearerToken);
+    }
     request.body = jsonEncode(data);
     final response = await request.send();
     if (response.statusCode > 300)
