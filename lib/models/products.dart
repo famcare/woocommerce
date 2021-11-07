@@ -174,9 +174,11 @@ class WooProduct {
         totalSales = json['total_sales'],
         virtual = json['virtual'],
         downloadable = json['downloadable'],
-        downloads = (json['downloads'] as List)
-            .map((i) => WooProductDownload.fromJson(i))
-            .toList(),
+        downloads = json['downloads'] == null
+            ? []
+            : (json['downloads'] as List)
+                .map((i) => WooProductDownload.fromJson(i))
+                .toList(),
         downloadLimit = json['download_limit'],
         downloadExpiry = json['download_expiry'],
         externalUrl = json['external_url'],
@@ -204,27 +206,39 @@ class WooProduct {
         crossSellIds = json['cross_sell_ids'].cast<int>(),
         parentId = json['parent_id'],
         purchaseNote = json['purchase_note'],
-        categories = (json['categories'] as List)
-            .map((i) => WooProductCategory.fromJson(i))
-            .toList(),
-        tags = (json['tags'] as List)
-            .map((i) => WooProductItemTag.fromJson(i))
-            .toList(),
-        images = (json['images'] as List)
-            .map((i) => WooProductImage.fromJson(i))
-            .toList(),
-        attributes = (json['attributes'] as List)
-            .map((i) => WooProductItemAttribute.fromJson(i))
-            .toList(),
-        defaultAttributes = (json['default_attributes'] as List)
-            .map((i) => WooProductDefaultAttribute.fromJson(i))
-            .toList(),
+        categories = json['categories'] == null
+            ? []
+            : (json['categories'] as List)
+                .map((i) => WooProductCategory.fromJson(i))
+                .toList(),
+        tags = json['tags'] == null
+            ? []
+            : (json['tags'] as List)
+                .map((i) => WooProductItemTag.fromJson(i))
+                .toList(),
+        images = json['images'] == null
+            ? []
+            : (json['images'] as List)
+                .map((i) => WooProductImage.fromJson(i))
+                .toList(),
+        attributes = json['attributes'] == null
+            ? []
+            : (json['attributes'] as List)
+                .map((i) => WooProductItemAttribute.fromJson(i))
+                .toList(),
+        defaultAttributes = json['default_attributes'] == null
+            ? []
+            : (json['default_attributes'] as List)
+                .map((i) => WooProductDefaultAttribute.fromJson(i))
+                .toList(),
         variations = json['variations'].cast<int>(),
         groupedProducts = json['grouped_products'].cast<int>(),
         menuOrder = json['menu_order'],
-        metaData = (json['meta_data'] as List)
-            .map((i) => MetaData.fromJson(i))
-            .toList();
+        metaData = json['meta_data'] == null
+            ? []
+            : (json['meta_data'] as List)
+                .map((i) => MetaData.fromJson(i))
+                .toList();
 
   @override
   toString() => "{id: $id}, {name: $name}, {price: $price}, {status: $status}";
