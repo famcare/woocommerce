@@ -157,8 +157,11 @@ class WooOrder {
     dateCompleted = json['date_completed'];
     dateCompletedGmt = json['date_completed_gmt'];
     cartHash = json['cart_hash'];
-    metaData =
-        (json['meta_data'] as List).map((i) => MetaData.fromJson(i)).toList();
+    if (json['meta_data'] != null) {
+      metaData =
+          (json['meta_data'] as List).map((i) => MetaData.fromJson(i)).toList();
+    }
+
     if (json['line_items'] != null) {
       lineItems = <LineItems>[];
       json['line_items'].forEach((v) {
@@ -577,8 +580,10 @@ class LineItems {
     total = json['total'];
     totalTax = json['total_tax'];
     taxes = (json['taxes'] as List).map((i) => Taxes.fromJson(i)).toList();
-    metaData =
-        (json['meta_data'] as List).map((i) => MetaData.fromJson(i)).toList();
+    if (json['meta_data'] != null) {
+      metaData =
+          (json['meta_data'] as List).map((i) => MetaData.fromJson(i)).toList();
+    }
     sku = json['sku'];
     price = json['price'].toString();
   }
@@ -660,8 +665,10 @@ class TaxLines {
     compound = json['compound'];
     taxTotal = json['tax_total'];
     shippingTaxTotal = json['shipping_tax_total'];
-    metaData =
-        (json['meta_data'] as List).map((i) => MetaData.fromJson(i)).toList();
+    if (json['meta_data'] != null) {
+      metaData =
+          (json['meta_data'] as List).map((i) => MetaData.fromJson(i)).toList();
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -706,8 +713,10 @@ class ShippingLines {
     totalTax = json['total_tax'];
 
     taxes = (json['taxes'] as List).map((i) => Taxes.fromJson(i)).toList();
-    metaData =
-        (json['meta_data'] as List).map((i) => MetaData.fromJson(i)).toList();
+    if (json['meta_data'] != null) {
+      metaData =
+          (json['meta_data'] as List).map((i) => MetaData.fromJson(i)).toList();
+    }
   }
 
   Map<String, dynamic> toJson() {
