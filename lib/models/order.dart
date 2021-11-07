@@ -63,6 +63,7 @@ class WooOrder {
   String? paymentMethodIcon;
   String? subTotal;
   bool? isPaid;
+  bool? canRefund;
   String? financialText;
   String? transactionId;
   String? datePaid;
@@ -124,12 +125,14 @@ class WooOrder {
       this.paymentMethodIcon,
       this.subTotal,
       this.isPaid,
+      this.canRefund,
       this.financialText,
       this.links});
 
   WooOrder.fromJson(Map<String, dynamic> json) {
     paymentMethodIcon = json['payment_method_icon'];
     isPaid = json['is_paid'];
+    canRefund = json['can_refund'];
     financialText = json['financial_text'];
     subTotal = json['sub_total'].toString();
     id = json['id'];
@@ -537,12 +540,14 @@ class Refunds {
   int? id;
   String? reason;
   String? total;
+  String? refundDate;
 
-  Refunds({this.id, this.reason, this.total});
+  Refunds({this.id, this.reason, this.total,this.refundDate});
 
   Refunds.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     reason = json['reason'];
+    refundDate = json['refund_date'];
     total = json['total'];
   }
 
