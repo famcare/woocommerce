@@ -60,6 +60,10 @@ class WooOrder {
   Shipping? shipping;
   String? paymentMethod;
   String? paymentMethodTitle;
+  String? paymentMethodIcon;
+  String? subTotal;
+  bool? isPaid;
+  String? financialText;
   String? transactionId;
   String? datePaid;
   String? datePaidGmt;
@@ -117,9 +121,17 @@ class WooOrder {
       this.feeLines,
       this.couponLines,
       this.refunds,
+      this.paymentMethodIcon,
+      this.subTotal,
+      this.isPaid,
+      this.financialText,
       this.links});
 
   WooOrder.fromJson(Map<String, dynamic> json) {
+    paymentMethodIcon = json['payment_method_icon'];
+    isPaid = json['is_paid'];
+    financialText = json['financial_text'];
+    subTotal = json['sub_total'].toString();
     id = json['id'];
     parentId = json['parent_id'];
     number = json['number'];
@@ -290,9 +302,11 @@ class WooOrderCouponLine {
         code = json['code'],
         discount = json['discount'],
         discountTax = json['discount_tax'],
-        metaData = (json['meta_data'] as List)
-            .map((i) => MetaData.fromJson(i))
-            .toList();
+        metaData = json['meta_data'] == null
+            ? []
+            : (json['meta_data'] as List)
+                .map((i) => MetaData.fromJson(i))
+                .toList();
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -325,11 +339,16 @@ class WooOrderFeeLine {
         taxStatus = json['tax_status'],
         total = json['total'],
         totalTax = json['total_tax'],
-        taxes =
-            (json['taxes'] as List).map((i) => FeeLineTax.fromJson(i)).toList(),
-        metaData = (json['meta_data'] as List)
-            .map((i) => MetaData.fromJson(i))
-            .toList();
+        taxes = json['taxes'] == null
+            ? []
+            : (json['taxes'] as List)
+                .map((i) => FeeLineTax.fromJson(i))
+                .toList(),
+        metaData = json['meta_data'] == null
+            ? []
+            : (json['meta_data'] as List)
+                .map((i) => MetaData.fromJson(i))
+                .toList();
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -542,6 +561,11 @@ class LineItems {
   int? productId;
   int? variationId;
   int? quantity;
+
+  int? pkg_sessions;
+  int? remain_sessions;
+  int? used_session_count;
+
   String? taxClass;
   String? subtotal;
   String? subtotalTax;
@@ -551,25 +575,33 @@ class LineItems {
   List<MetaData>? metaData;
   String? sku;
   String? price;
+  String? type;
 
-  LineItems(
-      {this.id,
-      this.name,
-      this.productId,
-      this.variationId,
-      this.quantity,
-      this.taxClass,
-      this.subtotal,
-      this.subtotalTax,
-      this.total,
-      this.totalTax,
-      this.taxes,
-      this.metaData,
-      this.sku,
-      this.price});
+  LineItems({
+    this.id,
+    this.name,
+    this.productId,
+    this.variationId,
+    this.quantity,
+    this.taxClass,
+    this.subtotal,
+    this.subtotalTax,
+    this.total,
+    this.totalTax,
+    this.taxes,
+    this.metaData,
+    this.sku,
+    this.price,
+    this.pkg_sessions,
+    this.remain_sessions,
+    this.used_session_count,
+    this.type,
+  });
 
   LineItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+
+    type = json['type'];
     name = json['name'];
     productId = json['product_id'];
     variationId = json['variation_id'];
@@ -586,6 +618,9 @@ class LineItems {
     }
     sku = json['sku'];
     price = json['price'].toString();
+    pkg_sessions = json['pkg_sessions'];
+    remain_sessions = json['remain_sessions'];
+    used_session_count = json['used_session_count'];
   }
 
   Map<String, dynamic> toJson() {
