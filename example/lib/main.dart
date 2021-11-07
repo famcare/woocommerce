@@ -35,12 +35,15 @@ class _MyHomePageState extends State<MyHomePage> {
   List<WooProduct> featuredProducts = [];
   WooCommerce wooCommerce = WooCommerce(
     baseUrl: baseUrl,
-    consumerKey: consumerKey,
-    consumerSecret: consumerSecret,
     isDebug: true,
   );
 
   getProducts() async {
+
+
+    
+
+    await wooCommerce.authenticateViaToken(token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJmYW1jYXJlLmFwcCIsImlhdCI6MTYzNjMxMTc2OCwibmJmIjoxNjM2MzExNzY4LCJleHAiOjE2MzY1NzA5NjgsInN1YiI6InpySGYxVyIsImF1dGgiOnsiaWQiOjY4NiwidHlwZSI6IlVzZXIifX0.V0W4u2HUuuoMF2reKdJwnri3ptV_njyIk9nOG4PR8zw");
     products = await wooCommerce.getProducts();
     setState(() {});
     print(products.toString());

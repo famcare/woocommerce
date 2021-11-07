@@ -128,8 +128,6 @@ class WooCommerce {
 
   WooCommerce({
     required String baseUrl,
-    required String consumerKey,
-    required String consumerSecret,
     String apiPath = DEFAULT_WC_API_PATH,
     bool isDebug = false,
   }) {
@@ -145,9 +143,9 @@ class WooCommerce {
   }
 
   void _printToLog(String message) {
-    if (isDebug) {
-      print("WOOCOMMERCE LOG : " + message);
-    }
+    // if (isDebug) {
+    print("WOOCOMMERCE LOG : " + message);
+    // }
   }
 
   String? _authToken;
@@ -190,12 +188,10 @@ class WooCommerce {
   }
 
   Future authenticateViaToken({required String token}) async {
-    
-      _authToken = token;
-      _localDbService.updateSecurityToken(_authToken);
-      _urlHeader['Authorization'] = 'Bearer $token';
-      return _authToken;
-  
+    _authToken = token;
+    _localDbService.updateSecurityToken(_authToken);
+    _urlHeader['Authorization'] = 'Bearer $token';
+    return _authToken;
   }
 
   /// Authenticates the user via JWT and returns a WooCommerce customer object of the current logged in customer.
