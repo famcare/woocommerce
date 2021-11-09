@@ -691,6 +691,9 @@ class TaxLines {
   bool? compound;
   String? taxTotal;
   String? shippingTaxTotal;
+      String? taxNumber;
+
+    
   List<MetaData>? metaData;
 
   TaxLines(
@@ -701,10 +704,12 @@ class TaxLines {
       this.compound,
       this.taxTotal,
       this.shippingTaxTotal,
+       this.taxNumber,
       this.metaData});
 
   TaxLines.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+      taxNumber =  json['tax_number'];
     rateCode = json['rate_code'];
     rateId = json['rate_id'];
     label = json['label'];
