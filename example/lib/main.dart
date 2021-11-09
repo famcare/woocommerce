@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-String baseUrl = "https://clinic-develop.famcare.app/";
+String baseUrl = "";
 String consumerKey = "";
 String consumerSecret = "";
 
@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     
 
-    await wooCommerce.authenticateViaToken(token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJmYW1jYXJlLmFwcCIsImlhdCI6MTYzNjMxMTc2OCwibmJmIjoxNjM2MzExNzY4LCJleHAiOjE2MzY1NzA5NjgsInN1YiI6InpySGYxVyIsImF1dGgiOnsiaWQiOjY4NiwidHlwZSI6IlVzZXIifX0.V0W4u2HUuuoMF2reKdJwnri3ptV_njyIk9nOG4PR8zw");
+    await wooCommerce.authenticateViaToken(token: "");
     products = await wooCommerce.getProducts();
     setState(() {});
     print(products.toString());
