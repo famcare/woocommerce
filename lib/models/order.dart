@@ -128,7 +128,7 @@ class WooOrder {
       this.subTotal,
       this.isPaid,
       this.canRefund,
-       this.qrCode,
+      this.qrCode,
       this.financialText,
       this.links});
 
@@ -139,7 +139,6 @@ class WooOrder {
     financialText = json['financial_text'];
     qrCode = json['qr_code'];
 
-      
     subTotal = json['sub_total'].toString();
     id = json['id'];
     parentId = json['parent_id'];
@@ -548,7 +547,7 @@ class Refunds {
   String? total;
   String? refundDate;
 
-  Refunds({this.id, this.reason, this.total,this.refundDate});
+  Refunds({this.id, this.reason, this.total, this.refundDate});
 
   Refunds.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -587,6 +586,10 @@ class LineItems {
   String? sku;
   String? price;
   String? type;
+  bool? is_on_sale;
+  String? regular_price;
+  String? sale_price;
+  String? total_inc_tax;
 
   LineItems({
     this.id,
@@ -607,10 +610,20 @@ class LineItems {
     this.remain_sessions,
     this.used_session_count,
     this.type,
+
+    this.is_on_sale,
+    this.regular_price,
+    this.sale_price,
+    this.total_inc_tax,
   });
 
   LineItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+
+    is_on_sale = json['is_on_sale'];
+    regular_price = json['regular_price'];
+    sale_price = json['sale_price'];
+    total_inc_tax = json['total_inc_tax'];
 
     type = json['type'];
     name = json['name'];
@@ -691,9 +704,8 @@ class TaxLines {
   bool? compound;
   String? taxTotal;
   String? shippingTaxTotal;
-      String? taxNumber;
+  String? taxNumber;
 
-    
   List<MetaData>? metaData;
 
   TaxLines(
@@ -704,12 +716,12 @@ class TaxLines {
       this.compound,
       this.taxTotal,
       this.shippingTaxTotal,
-       this.taxNumber,
+      this.taxNumber,
       this.metaData});
 
   TaxLines.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-      taxNumber =  json['tax_number'];
+    taxNumber = json['tax_number'];
     rateCode = json['rate_code'];
     rateId = json['rate_id'];
     label = json['label'];
