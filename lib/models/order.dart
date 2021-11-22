@@ -300,14 +300,19 @@ class WooOrderCouponLine {
   String? code;
   String? discount;
   String? discountTax;
+  String? discount_type;
+  String? amount;
+
   List<MetaData> metaData;
 
   WooOrderCouponLine(
-      this.id, this.code, this.discount, this.discountTax, this.metaData);
+      this.id, this.code, this.discount, this.discountTax, this.metaData, this.amount);
 
   WooOrderCouponLine.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         code = json['code'],
+        discount_type = json['discount_type'],
+        amount = json['amount'],
         discount = json['discount'],
         discountTax = json['discount_tax'],
         metaData = json['meta_data'] == null
