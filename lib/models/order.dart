@@ -589,7 +589,6 @@ class LineItems {
   bool? is_on_sale;
   String? regular_price;
   String? sale_price;
-  String? total_inc_tax;
 
   LineItems({
     this.id,
@@ -614,7 +613,6 @@ class LineItems {
     this.is_on_sale,
     this.regular_price,
     this.sale_price,
-    this.total_inc_tax,
   });
 
   LineItems.fromJson(Map<String, dynamic> json) {
@@ -623,7 +621,6 @@ class LineItems {
     is_on_sale = json['is_on_sale'];
     regular_price = json['regular_price'];
     sale_price = json['sale_price'];
-    total_inc_tax = json['total_inc_tax'];
 
     type = json['type'];
     name = json['name'];
