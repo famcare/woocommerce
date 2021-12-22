@@ -66,6 +66,8 @@ class WooOrder {
   bool? canRefund;
   String? financialText;
   String? qrCode;
+  String? invoiceId;
+
 
   String? transactionId;
   String? datePaid;
@@ -89,6 +91,7 @@ class WooOrder {
       this.orderKey,
       this.createdVia,
       this.version,
+       this.invoiceId,
       this.status,
       this.currency,
       this.dateCreated,
@@ -138,6 +141,8 @@ class WooOrder {
     canRefund = json['can_refund'];
     financialText = json['financial_text'];
     qrCode = json['qr_code'];
+          invoiceId = json['invoice_id'];
+
 
     subTotal = json['sub_total'].toString();
     id = json['id'];
