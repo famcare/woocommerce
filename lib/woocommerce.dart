@@ -1216,7 +1216,7 @@ class WooCommerce {
       String? orderBy,
       List<int>? parent,
       List<int>? parentExclude,
-      List<String>?
+      String?
           status, // Options: any, pending, processing, on-hold, completed, cancelled, refunded, failed and trash. Default is any.
       int? customer,
       int? product,
