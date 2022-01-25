@@ -33,10 +33,10 @@ class MyCartFamcare {
   int? id;
   String? currency;
   String? currencySymbol;
-  int? discountTotal;
-  int? discountTax;
+  num? discountTotal;
+  num? discountTax;
   String? total;
-  int? totalTax;
+  num? totalTax;
 
   // List<LineItems>? lineItems;
   // List<WooOrderCouponLine>? couponLines;
