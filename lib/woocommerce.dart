@@ -1906,8 +1906,7 @@ class WooCommerce {
     await getAuthTokenFromDb();
     _urlHeader[headerAuthorization] = 'Bearer ' + _authToken!;
     MyCartFamcare cart;
-    final response = await http.get(
-        Uri.parse('https://clinic-develop.famcare.app/wp-json/wc/v3/famcare-get-cart'),
+    final response = await http.get(Uri.parse(this.baseUrl + URL_GET_CART),
         headers: _urlHeader);
     _printToLog('response gotten : ' + response.toString());
     if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -1915,7 +1914,7 @@ class WooCommerce {
       cart = MyCartFamcare.fromJson(jsonStr);
       return cart;
     } else {
-      _printToLog(' errorShatha : https://clinic-develop.famcare.app/wp-json/wc/v3/famcare-get-cart' + response.body );
+      _printToLog(' error: On ${baseUrl + URL_GET_CART}' + response.body);
       WooCommerceError err =
           WooCommerceError.fromJson(json.decode(response.body));
       throw err;
