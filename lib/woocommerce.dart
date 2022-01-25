@@ -1915,7 +1915,7 @@ class WooCommerce {
       cart = MyCartFamcare.fromJson(jsonStr);
       return cart;
     } else {
-      _printToLog(' error : ' + response.body);
+      _printToLog(' error : ${this.baseUrl + URL_STORE_API_PATH + 'famcare-get-cart'}' + response.body );
       WooCommerceError err =
           WooCommerceError.fromJson(json.decode(response.body));
       throw err;
