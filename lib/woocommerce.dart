@@ -1907,7 +1907,7 @@ class WooCommerce {
     _urlHeader[headerAuthorization] = 'Bearer ' + _authToken!;
     MyCartFamcare cart;
     final response = await http.get(
-        Uri.parse(this.baseUrl + DEFAULT_WC_API_PATH + 'famcare-get-cart'),
+        Uri.parse('https://clinic-develop.famcare.app/wp-json/wc/v3/famcare-get-cart'),
         headers: _urlHeader);
     _printToLog('response gotten : ' + response.toString());
     if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -1915,7 +1915,7 @@ class WooCommerce {
       cart = MyCartFamcare.fromJson(jsonStr);
       return cart;
     } else {
-      _printToLog(' errorShatha : ${this.baseUrl + DEFAULT_WC_API_PATH + 'famcare-get-cart'}' + response.body );
+      _printToLog(' errorShatha : https://clinic-develop.famcare.app/wp-json/wc/v3/famcare-get-cart' + response.body );
       WooCommerceError err =
           WooCommerceError.fromJson(json.decode(response.body));
       throw err;
