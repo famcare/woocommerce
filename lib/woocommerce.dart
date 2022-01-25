@@ -35,15 +35,13 @@
 
 library woocommerce;
 
-import 'dart:async';
 import "dart:collection";
 import 'dart:convert';
 import 'dart:io';
-import "dart:math";
 import "dart:core";
-import 'package:crypto/crypto.dart' as crypto;
 import 'package:http/http.dart' as http;
 import 'package:woocommerce/models/customer_download.dart';
+import 'package:woocommerce/models/my_cart_famcare.dart';
 import 'package:woocommerce/models/payment_gateway.dart';
 import 'package:woocommerce/models/shipping_zone_method.dart';
 import 'models/cart_item.dart';
@@ -64,6 +62,7 @@ import 'models/products.dart';
 import 'models/shipping_method.dart';
 import 'models/shipping_zone.dart';
 import 'models/shipping_zone_location.dart';
+
 //import 'models/shipping_zone_method.dart';
 import 'models/tax_classes.dart';
 import 'models/tax_rate.dart';
@@ -95,6 +94,7 @@ export 'models/tax_classes.dart' show WooTaxClass;
 export 'models/tax_rate.dart' show WooTaxRate;
 export 'models/jwt_response.dart' show WooJWTResponse;
 export 'models/user.dart' show WooUser;
+export 'models/my_cart_famcare.dart' show MyCartFamcare;
 
 var headerAuthorization = "TOKEN";
 
@@ -151,14 +151,18 @@ class WooCommerce {
   }
 
   String? _authToken;
+
   String? get authToken => _authToken;
 
   Uri? queryUri;
+
   String get apiResourceUrl => queryUri.toString();
 
   // Header to be sent for JWT authourization
   Map<String, String> _urlHeader = {headerAuthorization: ''};
-  String get urlHeader => _urlHeader[headerAuthorization] = 'Bearer ' + authToken!;
+
+  String get urlHeader =>
+      _urlHeader[headerAuthorization] = 'Bearer ' + authToken!;
   LocalDatabaseService _localDbService = LocalDatabaseService();
 
   /// Authenticates the user using WordPress JWT authentication and returns the access [_token] string.
@@ -989,19 +993,19 @@ class WooCommerce {
   }
 
   /**
-  /// Accepts an int [id] of a product or product variation, int quantity, and an array of chosen variation attribute objects
-  /// Related endpoint : wc/store/cart
-  Future<WooCartItem>addToCart({@required int itemId, @required int quantity, List<WooProductVariation> variations}) async{
-    Map<String, dynamic> data = {
+      /// Accepts an int [id] of a product or product variation, int quantity, and an array of chosen variation attribute objects
+      /// Related endpoint : wc/store/cart
+      Future<WooCartItem>addToCart({@required int itemId, @required int quantity, List<WooProductVariation> variations}) async{
+      Map<String, dynamic> data = {
       'id': itemId,
       'quantity' : quantity,
-    };
-    if(variations!=null) data['variations'] = variations;
-    _setApiResourceUrl(path: 'cart/items', isShop: true);
-    final response = await post(queryUri.toString(), data,);
-    return WooCartItem.fromJson(response);
-  }
-  */
+      };
+      if(variations!=null) data['variations'] = variations;
+      _setApiResourceUrl(path: 'cart/items', isShop: true);
+      final response = await post(queryUri.toString(), data,);
+      return WooCartItem.fromJson(response);
+      }
+   */
 
   /// Accepts an int [id] of a product or product variation, int quantity, and an array of chosen variation attribute objects
   /// Related endpoint : wc/store/cart
@@ -1894,6 +1898,28 @@ class WooCommerce {
     final deleteResponse = await response.stream.bytesToString();
     _printToLog("delete response : " + deleteResponse.toString());
     return deleteResponse;
+  }
+
+  /// Returns the current user's [MyCartFamcare], information
+
+  Future<MyCartFamcare> getMyCartFamcare() async {
+    await getAuthTokenFromDb();
+    _urlHeader[headerAuthorization] = 'Bearer ' + _authToken!;
+    MyCartFamcare cart;
+    final response = await http.get(
+        Uri.parse(this.baseUrl + URL_STORE_API_PATH + 'famcare-get-cart'),
+        headers: _urlHeader);
+    _printToLog('response gotten : ' + response.toString());
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final jsonStr = json.decode(response.body);
+      cart = MyCartFamcare.fromJson(jsonStr);
+      return cart;
+    } else {
+      _printToLog(' error : ' + response.body);
+      WooCommerceError err =
+          WooCommerceError.fromJson(json.decode(response.body));
+      throw err;
+    }
   }
 }
 
