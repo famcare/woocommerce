@@ -76,9 +76,7 @@ class LineItems {
   num? total;
   num? totalTax;
   num? totalIncTax;
-  num? price;
   num? regularPrice;
-  num? netPrice;
 
   LineItems({
     this.productId,
@@ -90,8 +88,6 @@ class LineItems {
     this.total,
     this.totalTax,
     this.totalIncTax,
-    this.price,
-    this.netPrice,
     this.regularPrice,
   });
 
@@ -105,8 +101,6 @@ class LineItems {
     total = json['total'];
     totalTax = json['total_tax'];
     totalIncTax = json['total_inc_tax'];
-    price = json['price'];
-    netPrice = json['net_price'];
     regularPrice = json['regular_price'];
   }
 
@@ -121,8 +115,6 @@ class LineItems {
     data['total'] = this.total;
     data['total_tax'] = this.totalTax;
     data['total_inc_tax'] = this.totalIncTax;
-    data['price'] = this.price;
-    data['net_price'] = this.netPrice;
     data['regular_price'] = this.regularPrice;
     return data;
   }
