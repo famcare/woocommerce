@@ -7,8 +7,8 @@ class MyCartFamcare {
   int? id;
   String? currency;
   String? currencySymbol;
-  double? discountTotal;
-  double? discountTax;
+  num? discountTotal;
+  num? discountTax;
   int? total;
   int? totalTax;
   List<LineItems>? lineItems;
