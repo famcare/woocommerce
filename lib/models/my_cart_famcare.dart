@@ -71,11 +71,11 @@ class LineItems {
   String? type;
   String? name;
   int? quantity;
-  double? subtotal;
-  double? subtotalTax;
-  double? total;
+  num? subtotal;
+  num? subtotalTax;
+  num? total;
   int? totalTax;
-  double? totalIncTax;
+  num? totalIncTax;
 
   LineItems(
       {this.productId,
