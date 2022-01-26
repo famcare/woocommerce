@@ -74,7 +74,7 @@ class LineItems {
   num? subtotal;
   num? subtotalTax;
   num? total;
-  int? totalTax;
+  num? totalTax;
   num? totalIncTax;
 
   LineItems(
