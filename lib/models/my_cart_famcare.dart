@@ -9,8 +9,8 @@ class MyCartFamcare {
   String? currencySymbol;
   num? discountTotal;
   num? discountTax;
-  int? total;
-  int? totalTax;
+  num? total;
+  num? totalTax;
   List<LineItems>? lineItems;
   List<CouponLines>? couponLines;
 
