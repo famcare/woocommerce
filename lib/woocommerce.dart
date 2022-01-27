@@ -1910,9 +1910,13 @@ class WooCommerce {
         headers: _urlHeader);
     _printToLog('response gotten : ' + response.toString());
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      final jsonStr = json.decode(response.body);
-      print('Response:-- ${jsonStr.toString()}');
-      cart = MyCartFamcare.fromJson(jsonStr);
+      if (response.body == '[]') {
+        cart = MyCartFamcare.emptyCart();
+      } else {
+        final jsonStr = json.decode(response.body);
+        print('Response:-- ${jsonStr.toString()}');
+        cart = MyCartFamcare.fromJson(jsonStr);
+      }
       return cart;
     } else {
       _printToLog(' error: On ${baseUrl + URL_GET_CART}' + response.body);

@@ -64,6 +64,8 @@ class MyCartFamcare {
     }
     return data;
   }
+
+  factory MyCartFamcare.emptyCart() => MyCartFamcare();
 }
 
 class LineItems {
