@@ -37,18 +37,22 @@ library woocommerce;
 
 import "dart:collection";
 import 'dart:convert';
-import 'dart:io';
 import "dart:core";
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:woocommerce/models/customer_download.dart';
 import 'package:woocommerce/models/my_cart_famcare.dart';
 import 'package:woocommerce/models/payment_gateway.dart';
 import 'package:woocommerce/models/shipping_zone_method.dart';
-import 'models/cart_item.dart';
-import 'woocommerce_error.dart';
+
+import 'constants/constants.dart';
+import 'models/affiliate_area.dart';
 import 'models/cart.dart';
+import 'models/cart_item.dart';
 import 'models/coupon.dart';
 import 'models/customer.dart';
+import 'models/jwt_response.dart';
 import 'models/order.dart';
 import 'models/order_payload.dart';
 import 'models/product_attribute_term.dart';
@@ -62,20 +66,19 @@ import 'models/products.dart';
 import 'models/shipping_method.dart';
 import 'models/shipping_zone.dart';
 import 'models/shipping_zone_location.dart';
-
 //import 'models/shipping_zone_method.dart';
 import 'models/tax_classes.dart';
 import 'models/tax_rate.dart';
-import 'constants/constants.dart';
-import 'models/jwt_response.dart';
 import 'models/user.dart';
 import 'utilities/local_db.dart';
+import 'woocommerce_error.dart';
 
-export 'models/cart_item.dart' show WooCartItem;
-export 'woocommerce_error.dart' show WooCommerceError;
 export 'models/cart.dart' show WooCart;
+export 'models/cart_item.dart' show WooCartItem;
 export 'models/coupon.dart' show WooCoupon;
 export 'models/customer.dart' show WooCustomer;
+export 'models/jwt_response.dart' show WooJWTResponse;
+export 'models/my_cart_famcare.dart' show MyCartFamcare;
 export 'models/order.dart' show WooOrder;
 export 'models/order_payload.dart' show WooOrderPayload;
 export 'models/product_attribute_term.dart' show WooProductAttributeTerm;
@@ -92,9 +95,8 @@ export 'models/shipping_zone_location.dart' show WooShippingZoneLocation;
 export 'models/shipping_zone_method.dart' show WooShippingZoneMethod;
 export 'models/tax_classes.dart' show WooTaxClass;
 export 'models/tax_rate.dart' show WooTaxRate;
-export 'models/jwt_response.dart' show WooJWTResponse;
 export 'models/user.dart' show WooUser;
-export 'models/my_cart_famcare.dart' show MyCartFamcare;
+export 'woocommerce_error.dart' show WooCommerceError;
 
 var headerAuthorization = "TOKEN";
 
@@ -1918,6 +1920,27 @@ class WooCommerce {
         cart = MyCartFamcare.fromJson(jsonStr);
       }
       return cart;
+    } else {
+      _printToLog(' error: On ${baseUrl + URL_GET_CART}' + response.body);
+      WooCommerceError err =
+          WooCommerceError.fromJson(json.decode(response.body));
+      throw err;
+    }
+  }
+
+  /// Returns the current user's [AffiliateArea], information
+  ///
+  Future<AffiliateArea> getAffiliateAreaFamcare() async {
+    await getAuthTokenFromDb();
+    _urlHeader[headerAuthorization] = 'Bearer ' + _authToken!;
+    final response = await http.get(
+        Uri.parse(this.baseUrl + URL_GET_AFFILIATE_AREA),
+        headers: _urlHeader);
+    _printToLog('response gotten : ' + response.toString());
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final jsonStr = json.decode(response.body);
+      AffiliateArea affiliateArea = AffiliateArea.fromJson(jsonStr);
+      return affiliateArea;
     } else {
       _printToLog(' error: On ${baseUrl + URL_GET_CART}' + response.body);
       WooCommerceError err =
