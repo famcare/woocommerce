@@ -75,6 +75,9 @@ class WooOrder {
   String? dateCompleted;
   String? dateCompletedGmt;
   String? cartHash;
+  String? expiredAt;
+  int? validFor;
+
   List<MetaData>? metaData;
   List<LineItems>? lineItems;
   List<TaxLines>? taxLines;
@@ -133,6 +136,8 @@ class WooOrder {
       this.canRefund,
       this.qrCode,
       this.financialText,
+      this.expiredAt,
+      this.validFor,
       this.links});
 
   WooOrder.fromJson(Map<String, dynamic> json) {
@@ -141,9 +146,9 @@ class WooOrder {
     canRefund = json['can_refund'];
     financialText = json['financial_text'];
     qrCode = json['qr_code'];
-          invoiceId = json['invoice_id'];
-
-
+    invoiceId = json['invoice_id'];
+    expiredAt = json['expired_at'].toString();
+    validFor = json['valid_for']??0;
     subTotal = json['sub_total'].toString();
     id = json['id'];
     parentId = json['parent_id'];
@@ -246,6 +251,8 @@ class WooOrder {
     data['shipping_total'] = this.shippingTotal;
     data['shipping_tax'] = this.shippingTax;
     data['cart_tax'] = this.cartTax;
+    data['expired_at'] = this.expiredAt;
+    data['valid_for'] = this.validFor;
     data['total'] = this.total;
     data['total_tax'] = this.totalTax;
     data['prices_include_tax'] = this.pricesIncludeTax;
