@@ -144,8 +144,6 @@ class WooOrder {
     financialText = json['financial_text'];
     qrCode = json['qr_code'];
     invoiceId = json['invoice_id'];
-    expiredAt = json['expired_at'].toString();
-    validFor = json['valid_for']??0;
     subTotal = json['sub_total'].toString();
     id = json['id'];
     parentId = json['parent_id'];
@@ -248,8 +246,6 @@ class WooOrder {
     data['shipping_total'] = this.shippingTotal;
     data['shipping_tax'] = this.shippingTax;
     data['cart_tax'] = this.cartTax;
-    data['expired_at'] = this.expiredAt;
-    data['valid_for'] = this.validFor;
     data['total'] = this.total;
     data['total_tax'] = this.totalTax;
     data['prices_include_tax'] = this.pricesIncludeTax;
