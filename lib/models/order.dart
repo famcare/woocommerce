@@ -75,8 +75,7 @@ class WooOrder {
   String? dateCompleted;
   String? dateCompletedGmt;
   String? cartHash;
-  String? expiredAt;
-  int? validFor;
+
 
   List<MetaData>? metaData;
   List<LineItems>? lineItems;
@@ -136,8 +135,6 @@ class WooOrder {
       this.canRefund,
       this.qrCode,
       this.financialText,
-      this.expiredAt,
-      this.validFor,
       this.links});
 
   WooOrder.fromJson(Map<String, dynamic> json) {
@@ -606,7 +603,8 @@ class LineItems {
   bool? is_on_sale;
   String? regular_price;
   String? sale_price;
-
+  String? expiredAt;
+  int? validFor;
   LineItems({
     this.id,
     this.name,
@@ -626,7 +624,8 @@ class LineItems {
     this.remain_sessions,
     this.used_session_count,
     this.type,
-
+    this.expiredAt,
+    this.validFor,
     this.is_on_sale,
     this.regular_price,
     this.sale_price,
@@ -659,6 +658,8 @@ class LineItems {
     pkg_sessions = json['pkg_sessions'];
     remain_sessions = json['remain_sessions'];
     used_session_count = json['used_session_count'];
+    expiredAt = json['expired_at']??null;
+    validFor = json['valid_for']??0;
   }
 
   Map<String, dynamic> toJson() {
@@ -669,6 +670,8 @@ class LineItems {
     data['variation_id'] = this.variationId;
     data['quantity'] = this.quantity;
     data['tax_class'] = this.taxClass;
+    data['expired_at'] =this.expiredAt;
+    data['valid_for'] =this.validFor;
     data['subtotal'] = this.subtotal;
     data['subtotal_tax'] = this.subtotalTax;
     data['total'] = this.total;
