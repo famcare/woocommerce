@@ -67,8 +67,7 @@ class WooOrder {
   String? financialText;
   String? qrCode;
   String? invoiceId;
-
-
+  String? userSegment;
   String? transactionId;
   String? datePaid;
   String? datePaidGmt;
@@ -133,6 +132,7 @@ class WooOrder {
       this.subTotal,
       this.isPaid,
       this.canRefund,
+      this.userSegment,
       this.qrCode,
       this.financialText,
       this.links});
@@ -140,6 +140,7 @@ class WooOrder {
   WooOrder.fromJson(Map<String, dynamic> json) {
     paymentMethodIcon = json['payment_method_icon'];
     isPaid = json['is_paid'];
+    userSegment = json['user_segment']??"";
     canRefund = json['can_refund'];
     financialText = json['financial_text'];
     qrCode = json['qr_code'];
@@ -232,6 +233,7 @@ class WooOrder {
     data['id'] = this.id;
     data['parent_id'] = this.parentId;
     data['number'] = this.number;
+    data['user_segment'] = this.userSegment;
     data['order_key'] = this.orderKey;
     data['created_via'] = this.createdVia;
     data['version'] = this.version;
