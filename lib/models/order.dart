@@ -603,6 +603,8 @@ class LineItems {
   String? sale_price;
   String? expiredAt;
   int? validFor;
+  int? validForMonth;
+
   LineItems({
     this.id,
     this.name,
@@ -627,6 +629,7 @@ class LineItems {
     this.is_on_sale,
     this.regular_price,
     this.sale_price,
+    this.validForMonth
   });
 
   LineItems.fromJson(Map<String, dynamic> json) {
@@ -658,6 +661,8 @@ class LineItems {
     used_session_count = json['used_session_count'];
     expiredAt = json['expired_at']??null;
     validFor = json['valid_for']??0;
+    validForMonth = json['valid_for_month']??0;
+
   }
 
   Map<String, dynamic> toJson() {
@@ -666,6 +671,7 @@ class LineItems {
     data['name'] = this.name;
     data['product_id'] = this.productId;
     data['variation_id'] = this.variationId;
+    data['valid_for_month'] = this.validForMonth;
     data['quantity'] = this.quantity;
     data['tax_class'] = this.taxClass;
     data['expired_at'] =this.expiredAt;
