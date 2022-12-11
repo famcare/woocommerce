@@ -74,7 +74,7 @@ class WooOrder {
   String? dateCompleted;
   String? dateCompletedGmt;
   String? cartHash;
-
+  Map?cardDetails;
 
   List<MetaData>? metaData;
   List<LineItems>? lineItems;
@@ -88,6 +88,7 @@ class WooOrder {
   WooOrder(
       {required int this.id,
       this.parentId,
+       this.cardDetails,
       this.number,
       this.orderKey,
       this.createdVia,
@@ -138,6 +139,8 @@ class WooOrder {
       this.links});
 
   WooOrder.fromJson(Map<String, dynamic> json) {
+      
+    cardDetails = json['card_details'];
     paymentMethodIcon = json['payment_method_icon'];
     isPaid = json['is_paid'];
     userSegment = json['user_segment']??"";
