@@ -74,7 +74,7 @@ class WooOrder {
   String? dateCompleted;
   String? dateCompletedGmt;
   String? cartHash;
-  Map?cardDetails;
+  Map? cardDetails;
 
   List<MetaData>? metaData;
   List<LineItems>? lineItems;
@@ -85,65 +85,68 @@ class WooOrder {
   List<Refunds>? refunds;
   Links? links;
 
-  WooOrder(
-      {required int this.id,
-      this.parentId,
-       this.cardDetails,
-      this.number,
-      this.orderKey,
-      this.createdVia,
-      this.version,
-       this.invoiceId,
-      this.status,
-      this.currency,
-      this.dateCreated,
-      this.dateCreatedGmt,
-      this.dateModified,
-      this.dateModifiedGmt,
-      this.discountTotal,
-      this.discountTax,
-      this.shippingTotal,
-      this.shippingTax,
-      this.cartTax,
-      this.total,
-      this.totalTax,
-      this.pricesIncludeTax,
-      this.customerId,
-      this.customerIpAddress,
-      this.customerUserAgent,
-      this.customerNote,
-      this.billing,
-      this.shipping,
-      this.paymentMethod,
-      this.paymentMethodTitle,
-      this.transactionId,
-      this.datePaid,
-      this.datePaidGmt,
-      this.dateCompleted,
-      this.dateCompletedGmt,
-      this.cartHash,
-      this.metaData,
-      this.lineItems,
-      this.taxLines,
-      this.shippingLines,
-      this.feeLines,
-      this.couponLines,
-      this.refunds,
-      this.paymentMethodIcon,
-      this.subTotal,
-      this.isPaid,
-      this.canRefund,
-      this.userSegment,
-      this.qrCode,
-      this.financialText,
-      this.links});
+  bool? isFuture;
+
+  WooOrder({
+    required int this.id,
+    this.parentId,
+    this.cardDetails,
+    this.number,
+    this.orderKey,
+    this.createdVia,
+    this.version,
+    this.invoiceId,
+    this.status,
+    this.currency,
+    this.dateCreated,
+    this.dateCreatedGmt,
+    this.dateModified,
+    this.dateModifiedGmt,
+    this.discountTotal,
+    this.discountTax,
+    this.shippingTotal,
+    this.shippingTax,
+    this.cartTax,
+    this.total,
+    this.totalTax,
+    this.pricesIncludeTax,
+    this.customerId,
+    this.customerIpAddress,
+    this.customerUserAgent,
+    this.customerNote,
+    this.billing,
+    this.shipping,
+    this.paymentMethod,
+    this.paymentMethodTitle,
+    this.transactionId,
+    this.datePaid,
+    this.datePaidGmt,
+    this.dateCompleted,
+    this.dateCompletedGmt,
+    this.cartHash,
+    this.metaData,
+    this.lineItems,
+    this.taxLines,
+    this.shippingLines,
+    this.feeLines,
+    this.couponLines,
+    this.refunds,
+    this.paymentMethodIcon,
+    this.subTotal,
+    this.isPaid,
+    this.canRefund,
+    this.userSegment,
+    this.qrCode,
+    this.financialText,
+    this.links,
+    this.isFuture,
+  });
 
   WooOrder.fromJson(Map<String, dynamic> json) {
-      
     cardDetails = json['card_details'];
     paymentMethodIcon = json['payment_method_icon'];
     isPaid = json['is_paid'];
-    userSegment = json['user_segment']??"";
+    userSegment = json['user_segment'] ?? "";
     canRefund = json['can_refund'];
     financialText = json['financial_text'];
     qrCode = json['qr_code'];
@@ -229,6 +232,8 @@ class WooOrder {
       });
     }
     links = json['_links'] != null ? new Links.fromJson(json['_links']) : null;
+
+    isFuture = json['is_future'];
   }
 
   Map<String, dynamic> toJson() {
@@ -298,6 +303,7 @@ class WooOrder {
     if (this.links != null) {
       data['_links'] = this.links!.toJson();
     }
+    data['is_future'] = this.isFuture;
     return data;
   }
 
@@ -315,8 +321,8 @@ class WooOrderCouponLine {
 
   List<MetaData> metaData;
 
-  WooOrderCouponLine(
-      this.id, this.code, this.discount, this.discountTax, this.metaData, this.amount);
+  WooOrderCouponLine(this.id, this.code, this.discount, this.discountTax,
+      this.metaData, this.amount);
 
   WooOrderCouponLine.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -608,32 +614,31 @@ class LineItems {
   int? validFor;
   int? validForMonth;
 
-  LineItems({
-    this.id,
-    this.name,
-    this.productId,
-    this.variationId,
-    this.quantity,
-    this.taxClass,
-    this.subtotal,
-    this.subtotalTax,
-    this.total,
-    this.totalTax,
-    this.taxes,
-    this.metaData,
-    this.sku,
-    this.price,
-    this.pkg_sessions,
-    this.remain_sessions,
-    this.used_session_count,
-    this.type,
-    this.expiredAt,
-    this.validFor,
-    this.is_on_sale,
-    this.regular_price,
-    this.sale_price,
-    this.validForMonth
-  });
+  LineItems(
+      {this.id,
+      this.name,
+      this.productId,
+      this.variationId,
+      this.quantity,
+      this.taxClass,
+      this.subtotal,
+      this.subtotalTax,
+      this.total,
+      this.totalTax,
+      this.taxes,
+      this.metaData,
+      this.sku,
+      this.price,
+      this.pkg_sessions,
+      this.remain_sessions,
+      this.used_session_count,
+      this.type,
+      this.expiredAt,
+      this.validFor,
+      this.is_on_sale,
+      this.regular_price,
+      this.sale_price,
+      this.validForMonth});
 
   LineItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -662,10 +667,9 @@ class LineItems {
     pkg_sessions = json['pkg_sessions'];
     remain_sessions = json['remain_sessions'];
     used_session_count = json['used_session_count'];
-    expiredAt = json['expired_at']??null;
-    validFor = json['valid_for']??0;
-    validForMonth = json['valid_for_month']??0;
-
+    expiredAt = json['expired_at'] ?? null;
+    validFor = json['valid_for'] ?? 0;
+    validForMonth = json['valid_for_month'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -677,8 +681,8 @@ class LineItems {
     data['valid_for_month'] = this.validForMonth;
     data['quantity'] = this.quantity;
     data['tax_class'] = this.taxClass;
-    data['expired_at'] =this.expiredAt;
-    data['valid_for'] =this.validFor;
+    data['expired_at'] = this.expiredAt;
+    data['valid_for'] = this.validFor;
     data['subtotal'] = this.subtotal;
     data['subtotal_tax'] = this.subtotalTax;
     data['total'] = this.total;
