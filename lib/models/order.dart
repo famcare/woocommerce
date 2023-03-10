@@ -86,6 +86,7 @@ class WooOrder {
   Links? links;
 
   bool? isFuture;
+  String? startedAt;
 
   WooOrder({
     required int this.id,
@@ -234,6 +235,8 @@ class WooOrder {
     links = json['_links'] != null ? new Links.fromJson(json['_links']) : null;
 
     isFuture = json['is_future'];
+
+    startedAt = json['started_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -304,6 +307,7 @@ class WooOrder {
       data['_links'] = this.links!.toJson();
     }
     data['is_future'] = this.isFuture;
+    data['started_at'] = this.startedAt;
     return data;
   }
 
