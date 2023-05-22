@@ -86,10 +86,11 @@ class WooOrder {
   Links? links;
 
   bool? isFuture;
+  bool? isRecurring;
   String? startedAt;
 
   WooOrder({
-    required int this.id,
+    required  this.id,
     this.parentId,
     this.cardDetails,
     this.number,
@@ -141,6 +142,7 @@ class WooOrder {
     this.financialText,
     this.links,
     this.isFuture,
+    this.isRecurring,
   });
 
   WooOrder.fromJson(Map<String, dynamic> json) {
@@ -235,6 +237,7 @@ class WooOrder {
     links = json['_links'] != null ? new Links.fromJson(json['_links']) : null;
 
     isFuture = json['is_future'];
+    isRecurring = json['is_recurring'];
 
     startedAt = json['started_at'];
   }
@@ -307,6 +310,7 @@ class WooOrder {
       data['_links'] = this.links!.toJson();
     }
     data['is_future'] = this.isFuture;
+    data['is_recurring'] = this.isFuture;
     data['started_at'] = this.startedAt;
     return data;
   }
